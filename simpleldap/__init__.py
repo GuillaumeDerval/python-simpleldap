@@ -50,7 +50,7 @@ class LDAPItem(cidict):
         self.dn, self.attributes = result
         # XXX: quick and dirty, should really proxy straight to the existing
         # self.attributes dict.
-        for attribute, values in self.attributes.iteritems():
+        for attribute, values in self.attributes.items():
             # Make the entire list of values for each LDAP attribute
             # accessible through a dictionary mapping.
             self[attribute] = values
@@ -168,7 +168,7 @@ class Connection(object):
         else:
             self.connection = ldap.initialize(uri)
         if options:
-            for name, value in options.iteritems():
+            for name, value in options.items():
                 self.connection.set_option(getattr(ldap, name), value)
         if encryption == 'tls':
             self.connection.start_tls_s()

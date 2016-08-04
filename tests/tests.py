@@ -25,14 +25,18 @@ class ConnectionTests(TestCase):
                 conn = simpleldap.Connection(hostname=host, port=port,
                                              encryption=method,
                                              require_cert=cert)
-            except Exception, e:
+            except Exception as e:
                 self.fail("Got error connecting to %s %s %s %s: %s"
                           % (host, port, method, cert, e))
             else:
                 conn.close()
 
     def test_initialize_kwargs(self):
-        from StringIO import StringIO
+        try:  # Python 2
+            from StringIO import StringIO
+        except ImportError:  # Python 3
+            from io import StringIO
+
         output = StringIO()
         initialize_kwargs = {'trace_file': output, 'trace_level': 0}
         conn = simpleldap.Connection('ldap.utexas.edu',
@@ -107,7 +111,7 @@ class ConnectionTests(TestCase):
         obj = conn.get('cn=External Anonymous',
                        base_dn='ou=Groups,dc=ucdavis,dc=edu')
         self.assertTrue(isinstance(obj, conn.result_item_class))
-        self.assertEqual(obj['cn'], ['External Anonymous'])
+        self.assertEqual(obj['cn'], [b'External Anonymous'])
 
         self.assertRaises(simpleldap.ObjectNotFound, conn.get,
                           'cn=Does not exist',

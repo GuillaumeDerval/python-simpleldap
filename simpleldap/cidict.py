@@ -32,7 +32,7 @@ class cidict(dict):
             self[key] = dict[key]
 
     def has_key(self, key):
-        return super(cidict, self).has_key(key.lower())
+        return super(cidict, self).__contains__(key.lower())
 
     __contains__ = has_key
 
